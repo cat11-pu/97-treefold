@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><title>treefold</title>
+<style>body{font-family:system-ui,sans-serif;margin:24px;max-width:960px}
+textarea{width:100%;height:150px;font-family:ui-monospace,monospace}
+button{padding:6px 12px;margin:8px 8px 8px 0}pre{background:#f6f6f6;padding:10px;border-radius:6px;overflow:auto}
+.ok{color:#0a7}.bad{color:#c00}</style>
+</head>
+<body>
+<h1>treefold 工作台</h1>
+<p>改样例里的树、折叠集合、操作日志与过滤词再点运行，结果给可见行、两种隐藏计数、快照与预算裁剪。</p>
+<textarea id="input">{
+  "bad_op_code": "E_BAD_OP",
+  "budget": 3,
+  "filter": "beet",
+  "collapsed": ["b", "c1"],
+  "applied": ["o1", "o2", "o3"],
+  "tree": {
+    "id": "r", "label": "root",
+    "children": [
+      {"id": "a", "label": "apple", "children": [
+        {"id": "a1", "label": "adam", "children": []},
+        {"id": "b", "label": "bee", "children": [
+          {"id": "b1", "label": "beet", "children": []}
+        ]}
+      ]},
+      {"id": "c1", "label": "cat", "children": [
+        {"id": "c2", "label": "cave", "children": []}
+      ]}
+    ]
+  },
+  "ops": [
+    {"op_id": "o1", "op": "fold", "id": "c1"},
+    {"op_id": "o2", "op": "insert", "id": "c2", "parent": "c1", "label": "cave"},
+    {"op_id": "o3", "op": "fold", "id": "b"},
+    {"op_id": "o4", "op": "fold", "id": "a1"},
+    {"op_id": "o5", "op": "remove", "id": "a1"},
+    {"op_id": "o6", "op": "insert", "id": "a1", "parent": "a", "label": "adam"},
+    {"op_id": "o7", "op": "insert", "id": "e1", "parent": "a", "label": "eel"}
+  ]
+}</textarea>
+<div><button id="run">运行</button><span id="status" class="ok">等待</span></div>
+<pre id="out">还没跑</pre>
+<script type="module">
+import { render } from "./app.js";
+
+document.getElementById("run").addEventListener("click", function () {
+  const status = document.getElementById("status");
+  try {
+    const spec = JSON.parse(document.getElementById("input").value);
+    const result = render(spec);
+    status.className = "ok";
+    status.textContent = "完成";
+    document.getElementById("out").textContent = JSON.stringify(result, null, 1);
+  } catch (error) {
+    status.className = "bad";
+    status.textContent = "出错 " + error.message;
+    document.getElementById("out").textContent = String(error && error.stack ? error.stack : error);
+  }
+});
+</script>
+</body>
+</html>

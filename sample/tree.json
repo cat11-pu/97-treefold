@@ -1,0 +1,30 @@
+{
+  "bad_op_code": "E_BAD_OP",
+  "budget": 3,
+  "filter": "beet",
+  "collapsed": ["b", "c1"],
+  "applied": ["o1", "o2", "o3"],
+  "tree": {
+    "id": "r", "label": "root",
+    "children": [
+      {"id": "a", "label": "apple", "children": [
+        {"id": "a1", "label": "adam", "children": []},
+        {"id": "b", "label": "bee", "children": [
+          {"id": "b1", "label": "beet", "children": []}
+        ]}
+      ]},
+      {"id": "c1", "label": "cat", "children": [
+        {"id": "c2", "label": "cave", "children": []}
+      ]}
+    ]
+  },
+  "ops": [
+    {"op_id": "o1", "op": "fold", "id": "c1"},
+    {"op_id": "o2", "op": "insert", "id": "c2", "parent": "c1", "label": "cave"},
+    {"op_id": "o3", "op": "fold", "id": "b"},
+    {"op_id": "o4", "op": "fold", "id": "a1"},
+    {"op_id": "o5", "op": "remove", "id": "a1"},
+    {"op_id": "o6", "op": "insert", "id": "a1", "parent": "a", "label": "adam"},
+    {"op_id": "o7", "op": "insert", "id": "e1", "parent": "a", "label": "eel"}
+  ]
+}
